@@ -19,6 +19,11 @@ class MainWindow(QMainWindow):
         add_action.triggered.connect(self.insert)
         file_menu_item.addAction(add_action)
 
+        # Add Refresh action
+        refresh_action = QAction("Refresh", self)
+        refresh_action.triggered.connect(self.load_data)
+        file_menu_item.addAction(refresh_action)
+
         about_action = QAction("About", self)
         help_menu_item.addAction(about_action)
 
@@ -33,7 +38,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.table)
 
     def load_data(self):
-        self.table.insertRow(0)
+        # Clear the table before loading new data
+        self.table.setRowCount(0)
         
         connection = sqlite3.connect("database.db")
         result = connection.execute("SELECT * FROM students")
@@ -146,4 +152,3 @@ mainwindows.show()
 mainwindows.load_data()
 sys.exit(app.exec())
 
-    
