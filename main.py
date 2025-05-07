@@ -6,6 +6,15 @@ import sys
 import sqlite3
 
 
+class DatabaseConnection:
+    def __init__(self,database_file="database.db"):
+        self.database_file = database_file
+
+    def connect(self):
+        connection = sqlite3.connect(self.database_file)
+        return connection
+    
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -28,7 +37,7 @@ class MainWindow(QMainWindow):
         file_menu_item.addAction(refresh_action)
 
         #Add instruction action
-        instruction_action = QAction(QIcon("icons/instruction.png"),"Instruction", self)
+        instruction_action = QAction(QIcon("icons/instruction.png"),"Guide", self)
         help_menu_item.addAction(instruction_action)
         instruction_action.triggered.connect(self.instruction)
 
@@ -94,7 +103,7 @@ class MainWindow(QMainWindow):
         # Clear the table before loading new data
         self.table.setRowCount(0)
         
-        connection = sqlite3.connect("database.db")
+        connection = DatabaseConnection().connect()
         result = connection.execute("SELECT * FROM students")
         
         for row_number, row_data in enumerate(result):
@@ -120,7 +129,7 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
     def instruction(self):
-        dialog = IntrucDialog()
+        dialog = GuideDialog()
         dialog.exec()
 
     
@@ -129,10 +138,10 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
 
-class IntrucDialog(QDialog):
+class GuideDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Instruction")
+        self.setWindowTitle("Guide")
         
 
         main_content = (
@@ -323,7 +332,7 @@ class EditDialog(QDialog):
         self.setLayout(layout)
     
     def update_record(self):
-        connection = sqlite3.connect("database.db")
+        connection = DatabaseConnection().connect()        
         cursor = connection.cursor()
         cursor.execute("UPDATE students SET name = ?,blood_group = ?,mobile = ?,address = ? WHERE id = ?",
                        (self.donar_name.text(),
@@ -338,6 +347,8 @@ class EditDialog(QDialog):
 
         #Refresh the main window
         mainwindows.load_data()
+
+        self.close()
 
 
 class DeleteDialog(QDialog):
@@ -362,7 +373,7 @@ class DeleteDialog(QDialog):
         # Get the donar id
         index = mainwindows.table.currentRow()
         donar_id = mainwindows.table.item(index, 0).text()
-        connection = sqlite3.connect("database.db")
+        connection = DatabaseConnection().connect()
         cursor = connection.cursor()
 
         # Delete the selected row
@@ -437,7 +448,7 @@ class InsertDialog(QDialog):
         blood_group = self.blood_group.itemText(self.blood_group.currentIndex())
         mobile = self.phone.text()
         address = self.address.text()
-        connection = sqlite3.connect("database.db")
+        connection = DatabaseConnection().connect()
         cursor = connection.cursor()
         cursor.execute("INSERT INTO students (name,blood_group,mobile,address) VALUES (?,?,?,?)",(name,blood_group,mobile,address))
         connection.commit()
@@ -470,7 +481,7 @@ class SearchDialog(QDialog):
 
     def search_donar(self):
         blood_group = self.targername.text()
-        connection = sqlite3.connect("database.db")
+        connection = DatabaseConnection().connect()
         cursor = connection.cursor()
         result = cursor.execute("SELECT * FROM students WHERE blood_group = ?",(blood_group,))
         items = mainwindows.table.findItems(blood_group, Qt.MatchFlag.MatchFixedString)
