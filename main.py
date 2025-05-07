@@ -129,12 +129,11 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
 
-class IntrucDialog(QMessageBox):
+class IntrucDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Instruction")
-        self.setSizeIncrement(1, 1)
-        self.setSizeGripEnabled(True)
+        
 
         main_content = (
             "Blood Donor Management System - Instructions\n"
@@ -172,8 +171,28 @@ class IntrucDialog(QMessageBox):
 
             "Thank you for using the Blood Donor Management System!"
         )
+        content_label = QLabel(main_content)
+        content_label.setWordWrap(True)
 
-        self.setText(main_content)
+        layout = QGridLayout()
+        layout.addWidget(content_label)
+        self.setLayout(layout)
+
+        self.setStyleSheet(
+            """
+            QDialog {
+               background-image: url("background/background2.png");
+               background-repeat: no-repeat;
+               background-position: center;
+               
+            }
+            QLabel {
+               color: black;
+               font-size: 14px;
+            }
+            """
+        )
+
 
 class AboutDialog(QDialog):
     def __init__(self):
@@ -249,7 +268,7 @@ class AboutDialog(QDialog):
                
             }
             QLabel {
-               color: black; /* Set text color to black for better visibility */
+               color: black;
                font-size: 14px;
             }
             """
