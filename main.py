@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayout, QLineEdit, QPushButton,\
     QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox
-from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtGui import QAction, QIcon, QPixmap
 from PyQt6.QtCore import Qt
 import sys
 import sqlite3
@@ -28,8 +28,9 @@ class MainWindow(QMainWindow):
         file_menu_item.addAction(refresh_action)
 
         #Add about action
-        about_action = QAction("About", self)
+        about_action = QAction(QIcon("icons/about.png"),"About", self)
         help_menu_item.addAction(about_action)
+        about_action.triggered.connect(self.about)
 
         #Add Search action
         search_action = QAction(QIcon("icons/search.png"),"Search", self)
@@ -112,6 +113,66 @@ class MainWindow(QMainWindow):
     def delete(self):
         dialog = DeleteDialog()
         dialog.exec()
+
+    def instruction(self):
+        pass
+
+    
+    def about(self):
+        dialog = AboutDialog()
+        dialog.exec()
+
+
+class AboutDialog(QMessageBox):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("About The App")
+        self.setSizeIncrement(1, 1)
+        self.setSizeGripEnabled(True)
+
+        # Main content for the dialog box
+        main_content = (
+            "Blood Donor Management System\n"
+            "===============================\n\n"
+            "Author: NAVID UL ISLAM\n\n"
+            "About the Application:\n"
+            "----------------------\n"
+            "The Blood Donor Management System is a desktop application designed to efficiently manage blood donor records.\n"
+            "It provides a user-friendly interface for managing donor information such as name, blood group, phone number, and address.\n\n"
+            
+            "Key Features:\n"
+            "-------------\n"
+            "1. Add Donor: Easily add new donor records to the database.\n"
+            "2. Search Donor: Search for donors by blood group to quickly find matching records.\n"
+            "3. Edit Donor: Update existing donor information with ease.\n"
+            "4. Delete Donor: Remove donor records and automatically renumber the IDs for consistency.\n"
+            "5. Refresh Data: Reload the donor data to ensure the latest information is displayed.\n"
+            "6. Instruction: Learn how to use the app.\n"
+            "7. About Section: Learn more about the application and its owner.\n\n"
+
+            "How This App is Useful:\n"
+            "-----------------------\n"
+            "1. For Blood Banks: Helps blood banks maintain an organized database of donors, making it easier to find donors during emergencies.\n"
+            "2. For Hospitals: Enables hospitals to quickly search for donors with specific blood groups.\n"
+            "3. For NGOs: Assists NGOs in managing donor information for blood donation drives.\n"
+            "4. For Individuals: Allows individuals to maintain a personal database of blood donors for emergencies.\n\n"
+            "This application simplifies the process of managing donor records, ensuring that critical information is always accessible when needed.\n\n"
+
+            "Thank you for using the Blood Donor Management System!"
+        )
+
+        self.setText(main_content)
+        self.setStyleSheet(
+        """
+        QMessageBox {
+           background-image: url("background/image.png");
+           background-repeat: no-repeat;
+           background-position: center;
+           background-size: cover; /* Resize the image to cover the entire dialog */
+
+        }
+        """
+        )
 
 
 class EditDialog(QDialog):
