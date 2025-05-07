@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayout, QLineEdit, QPushButton,\
-    QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar
+    QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
 import sys
@@ -56,6 +56,8 @@ class MainWindow(QMainWindow):
 
         #Detect a click 
         self.table.cellClicked.connect(self.cell_clicked)
+        self.table.clearSelection()  # Clear selection initially
+        self.table.itemSelectionChanged.connect(self.clear_statusbar)  # Connect to clear status bar
 
     def cell_clicked(self):
         edit_button = QPushButton("Edit Record")
@@ -64,14 +66,23 @@ class MainWindow(QMainWindow):
         delete_button = QPushButton("Delete Record")
         delete_button.clicked.connect(self.delete)
 
+        # Remove existing buttons from the status bar
         children = self.findChildren(QPushButton)
         if children:
             for child in children:
                 self.statusbar.removeWidget(child)
 
+        # Add new buttons to the status bar
         self.statusbar.addWidget(edit_button)
         self.statusbar.addWidget(delete_button)
 
+    def clear_statusbar(self):
+        # Clear the status bar if no cell is selected
+        if not self.table.selectedItems():
+            children = self.findChildren(QPushButton)
+            if children:
+                for child in children:
+                    self.statusbar.removeWidget(child)
 
     def load_data(self):
         # Clear the table before loading new data
@@ -169,8 +180,59 @@ class EditDialog(QDialog):
 
 
 class DeleteDialog(QDialog):
-    pass
-    
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Delete Donar's Record")
+
+        layout = QGridLayout()
+        confirmation = QLabel("Are you sure you want to delete?")
+        yes_button = QPushButton("Yes")
+        no_button = QPushButton("No")
+
+        layout.addWidget(confirmation, 0, 0, 1, 2)
+        layout.addWidget(yes_button, 1, 0)
+        layout.addWidget(no_button, 1, 1)
+        self.setLayout(layout)
+
+        yes_button.clicked.connect(self.delete_donar)
+        no_button.clicked.connect(self.close)
+
+    def delete_donar(self):
+        # Get the donar id
+        index = mainwindows.table.currentRow()
+        donar_id = mainwindows.table.item(index, 0).text()
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+
+        # Delete the selected row
+        cursor.execute("DELETE FROM students WHERE id = ?", (donar_id,))
+        connection.commit()
+
+        # Renumber the id column
+        cursor.execute("CREATE TEMPORARY TABLE students_backup AS SELECT * FROM students")
+        cursor.execute("DELETE FROM students")
+        cursor.execute("""
+            INSERT INTO students (id, name, blood_group, mobile, address)
+            SELECT ROW_NUMBER() OVER (ORDER BY id) AS id, name, blood_group, mobile, address
+            FROM students_backup
+        """)
+        cursor.execute("DROP TABLE students_backup")
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        # Refresh the main window
+        mainwindows.load_data()
+
+        self.close()
+
+        # Show confirmation message
+        confirmation_message = QMessageBox()
+        confirmation_message.setWindowTitle("Successful")
+        confirmation_message.setText("The record was deleted successfully.")
+        confirmation_message.exec()
+        
 
 class InsertDialog(QDialog):
     def __init__(self):
