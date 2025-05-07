@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayout, QLineEdit, QPushButton,\
     QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox
-from PyQt6.QtGui import QAction, QIcon, QPixmap
+from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
 import sys
 import sqlite3
@@ -26,6 +26,11 @@ class MainWindow(QMainWindow):
         refresh_action = QAction(QIcon("icons/refresh.png"),"Refresh", self)
         refresh_action.triggered.connect(self.load_data)
         file_menu_item.addAction(refresh_action)
+
+        #Add instruction action
+        instruction_action = QAction(QIcon("icons/instruction.png"),"Instruction", self)
+        help_menu_item.addAction(instruction_action)
+        instruction_action.triggered.connect(self.instruction)
 
         #Add about action
         about_action = QAction(QIcon("icons/about.png"),"About", self)
@@ -115,7 +120,8 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
     def instruction(self):
-        pass
+        dialog = IntrucDialog()
+        dialog.exec()
 
     
     def about(self):
@@ -123,55 +129,130 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
 
-class AboutDialog(QMessageBox):
+class IntrucDialog(QMessageBox):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("About The App")
+        self.setWindowTitle("Instruction")
         self.setSizeIncrement(1, 1)
         self.setSizeGripEnabled(True)
 
-        # Main content for the dialog box
         main_content = (
-            "Blood Donor Management System\n"
-            "===============================\n\n"
-            "Author: NAVID UL ISLAM\n\n"
-            "About the Application:\n"
-            "----------------------\n"
-            "The Blood Donor Management System is a desktop application designed to efficiently manage blood donor records.\n"
-            "It provides a user-friendly interface for managing donor information such as name, blood group, phone number, and address.\n\n"
-            
-            "Key Features:\n"
-            "-------------\n"
-            "1. Add Donor: Easily add new donor records to the database.\n"
-            "2. Search Donor: Search for donors by blood group to quickly find matching records.\n"
-            "3. Edit Donor: Update existing donor information with ease.\n"
-            "4. Delete Donor: Remove donor records and automatically renumber the IDs for consistency.\n"
-            "5. Refresh Data: Reload the donor data to ensure the latest information is displayed.\n"
-            "6. Instruction: Learn how to use the app.\n"
-            "7. About Section: Learn more about the application and its owner.\n\n"
+            "Blood Donor Management System - Instructions\n"
+            "============================================\n\n"
 
-            "How This App is Useful:\n"
-            "-----------------------\n"
-            "1. For Blood Banks: Helps blood banks maintain an organized database of donors, making it easier to find donors during emergencies.\n"
-            "2. For Hospitals: Enables hospitals to quickly search for donors with specific blood groups.\n"
-            "3. For NGOs: Assists NGOs in managing donor information for blood donation drives.\n"
-            "4. For Individuals: Allows individuals to maintain a personal database of blood donors for emergencies.\n\n"
-            "This application simplifies the process of managing donor records, ensuring that critical information is always accessible when needed.\n\n"
+            "1. **Add a Donor**:\n"
+            "- Click on the 'Add Student' button in the toolbar or select it from the 'File' menu.\n"
+            "- Fill in the donor's details (Name, Blood Group, Phone Number, Address) in the form.\n"
+            "- Click 'Submit' to save the donor's information.\n\n"
+
+            "2. **Search for a Donor**:\n"
+            "- Click on the 'Search' button in the toolbar or select it from the 'Edit' menu.\n"
+            "- Enter the desired blood group in the search field.\n"
+            "- Click 'Search' to highlight matching donors in the table.\n\n"
+
+            "3. **Edit a Donor's Information**:\n"
+            "- Select a donor from the table by clicking on their row.\n"
+            "- Click the 'Edit Record' button in the status bar.\n"
+            "- Update the donor's details in the form and click 'Update' to save changes.\n\n"
+
+            "4. **Delete a Donor**:\n"
+            "- Select a donor from the table by clicking on their row.\n"
+            "- Click the 'Delete Record' button in the status bar.\n"
+            "- Confirm the deletion in the dialog box.\n\n"
+
+            "5. **Refresh Data**:\n"
+            "- Click on the 'Refresh' button in the toolbar or select it from the "
+            "'File' menu to reload the latest data from the database.\n\n"
+
+            "6. **View About Information**:\n"
+            "- Click on the 'About' button in the 'Help' menu to learn more about the application and its purpose.\n\n"
+
+            "7. **Exit the Application**:\n"
+            "- Close the window or use the system's close button to exit the application.\n\n"
 
             "Thank you for using the Blood Donor Management System!"
         )
 
         self.setText(main_content)
-        self.setStyleSheet(
-        """
-        QMessageBox {
-           background-image: url("background/image.png");
-           background-repeat: no-repeat;
-           background-position: center;
-           background-size: cover; /* Resize the image to cover the entire dialog */
 
-        }
-        """
+class AboutDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("About The App")
+        self.setMinimumWidth(800)
+          
+
+        # Main content for the dialog box
+        main_content = (
+            "<h2>Blood Donor Management System</h2>"
+            "<hr>"
+            "<p><strong>Author:</strong> NAVID UL ISLAM</p>"
+            "<p><strong>About the Application:</strong></p>"
+            "<p>The Blood Donor Management System is a desktop application designed to efficiently manage blood donor records. "
+            "It provides a user-friendly interface for managing donor information such as name, blood group, phone number, and address.</p>"
+            "<p><strong>Key Features:</strong></p>"
+            "<ul>"
+            "<li>Add Donor: Easily add new donor records to the database.</li>"
+            "<li>Search Donor: Search for donors by blood group to quickly find matching records.</li>"
+            "<li>Edit Donor: Update existing donor information with ease.</li>"
+            "<li>Delete Donor: Remove donor records and automatically renumber the IDs for consistency.</li>"
+            "<li>Refresh Data: Reload the donor data to ensure the latest information is displayed.</li>"
+            "<li>Instruction: Learn how to use the app.</li>"
+            "<li>About Section: Learn more about the application and its owner.</li>"
+            "</ul>"
+            "<p><strong>How This App is Useful:</strong></p>"
+            "<ul>"
+            "<li>For Blood Banks: Helps blood banks maintain an organized database of donors, making it easier to find donors during emergencies.</li>"
+            "<li>For Hospitals: Enables hospitals to quickly search for donors with specific blood groups.</li>"
+            "<li>For NGOs: Assists NGOs in managing donor information for blood donation drives.</li>"
+            "<li>For Individuals: Allows individuals to maintain a personal database of blood donors for emergencies.</li>"
+            "</ul>"
+            "<p>This application simplifies the process of managing donor records, ensuring that critical information is always accessible when needed.</p>"
+            "<p><strong>Thank you for using the Blood Donor Management System!</strong></p>"
+        )
+
+        # Add Facebook and LinkedIn links
+        profile_content = (
+            '<p><strong>Feel free to contact me:</strong></p>'
+            '<p>'
+            '<img src="icons/facebook.png" width="20" height="20" style="vertical-align:middle;"> '
+            '<a href="https://www.facebook.com/profile.php?id=100010379958908">Facebook Profile</a>'
+            '</p>'
+            '<p>'
+            '<img src="icons/linkedin.png" width="20" height="20" style="vertical-align:middle;"> '
+            '<a href="https://www.linkedin.com/in/navid-ul-islam" target="_blank">LinkedIn Profile</a>'
+            '</p>'
+        )
+
+        # Combine main content and profile content
+        full_content = f"{main_content}{profile_content}"
+
+        # Create a QLabel to display the content
+        content_label = QLabel(full_content)
+        content_label.setTextFormat(Qt.TextFormat.RichText)  # Enable rich text formatting
+        content_label.setWordWrap(True)  # Allow text to wrap within the dialog
+
+        # Create a layout and add the QLabel
+        layout = QVBoxLayout()
+        layout.addWidget(content_label)
+
+        # Set the layout for the dialog
+        self.setLayout(layout)
+
+        # Set the stylesheet for the dialog
+        self.setStyleSheet(
+            """
+            QDialog {
+               background-image: url("background/background3.png");
+               background-repeat: no-repeat;
+               background-position: center;
+               
+            }
+            QLabel {
+               color: black; /* Set text color to black for better visibility */
+               font-size: 14px;
+            }
+            """
         )
 
 
