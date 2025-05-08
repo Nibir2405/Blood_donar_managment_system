@@ -71,6 +71,10 @@ class MainWindow(QMainWindow):
         self.statusbar = QStatusBar()
         self.setStatusBar(self.statusbar)
 
+        #Add version number to the statusbar
+        version_no = QLabel(f"v{QApplication.applicationVersion()}")
+        self.statusbar.addPermanentWidget(version_no)
+
         #Detect a click 
         self.table.cellClicked.connect(self.cell_clicked)
         self.table.clearSelection()  # Clear selection initially
@@ -144,6 +148,7 @@ class GuideDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Guide")
+        self.setMinimumWidth(1000)
         
         #Add main content for the Guide dialog box
         main_content = (
@@ -211,17 +216,17 @@ class AboutDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("About The App")
-        self.setMinimumWidth(800)
+        self.setMinimumWidth(1000)
           
 
         # Main content for the dialog box
         main_content = (
             "<h2>Blood Donor Management System</h2>"
             "<hr>"
-            "<p><strong>Author:</strong> NAVID UL ISLAM</p>"
             "<p><strong>About the Application:</strong></p>"
             "<p>The Blood Donor Management System is a desktop application designed to efficiently manage blood donor records. "
             "It provides a user-friendly interface for managing donor information such as name, blood group, phone number, and address.</p>"
+            f"<p><strong>Version:</strong>{QApplication.applicationVersion()}</p>"
             "<p><strong>Key Features:</strong></p>"
             "<ul>"
             "<li>Add Donor: Easily add new donor records to the database.</li>"
@@ -239,6 +244,7 @@ class AboutDialog(QDialog):
             "<li>For NGOs: Assists NGOs in managing donor information for blood donation drives.</li>"
             "<li>For Individuals: Allows individuals to maintain a personal database of blood donors for emergencies.</li>"
             "</ul>"
+            "<p><strong>Developed By:</strong> NAVID UL ISLAM</p>"
             "<p>This application simplifies the process of managing donor records, ensuring that critical information is always accessible when needed.</p>"
             "<p><strong>Thank you for using the Blood Donor Management System!</strong></p>"
         )
@@ -247,12 +253,12 @@ class AboutDialog(QDialog):
         profile_content = (
             '<p><strong>Feel free to contact me:</strong></p>'
             '<p>'
-            '<img src="icons/facebook.png" width="20" height="20" style="vertical-align:middle;"> '
-            '<a href="https://www.facebook.com/profile.php?id=100010379958908">Facebook Profile</a>'
+            '<img src="icons/facebook.png" width="40" height="40" style="vertical-align:middle;"> '
+            '<a href="https://www.facebook.com/profile.php?id=100010379958908"><b>Facebook Profile</b></a>'
             '</p>'
             '<p>'
-            '<img src="icons/linkedin.png" width="20" height="20" style="vertical-align:middle;"> '
-            '<a href="https://www.linkedin.com/in/navid-ul-islam" target="_blank">LinkedIn Profile</a>'
+            '<img src="icons/linkedin.png" width="40" height="40" style="vertical-align:middle;"> '
+            '<a href="https://www.linkedin.com/in/navid-ul-islam" target="_blank"><b>LinkedIn Profile</b></a>'
             '</p>'
         )
 
@@ -263,6 +269,9 @@ class AboutDialog(QDialog):
         content_label = QLabel(full_content)
         content_label.setTextFormat(Qt.TextFormat.RichText)  # Enable rich text formatting
         content_label.setWordWrap(True)  # Allow text to wrap within the dialog
+        content_label.setOpenExternalLinks(True)  # Enable hyperlink interaction
+        content_label.setGeometry(20, 20, 760, 560)  # Position the content inside the dialog
+        
 
         # Create a layout and add the QLabel
         layout = QVBoxLayout()
@@ -275,7 +284,7 @@ class AboutDialog(QDialog):
         self.setStyleSheet(
             """
             QDialog {
-               background-image: url("background/background3.png");
+               background-image: url("background/background3.jpeg");
                background-repeat: no-repeat;
                background-position: center;
                
@@ -283,6 +292,14 @@ class AboutDialog(QDialog):
             QLabel {
                color: black;
                font-size: 14px;
+            }
+            QLabel a{
+                color: black;
+                text-decoration:none;
+            }
+            QLabel a:hover {
+                color:black;
+                text-decoration:underline;
             }
             """
         )
@@ -498,6 +515,7 @@ class SearchDialog(QDialog):
 
 
 app = QApplication(sys.argv)
+app.setApplicationVersion("1.0.1")
 main_window = MainWindow()
 main_window.show()
 main_window.load_data()
