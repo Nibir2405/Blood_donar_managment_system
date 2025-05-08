@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Blood Donar Management System")
         self.setMinimumSize(800,600)
 
+        #Add Menu Item
         file_menu_item = self.menuBar().addMenu("File")
         edit_menu_item = self.menuBar().addMenu("Edit")
         help_menu_item = self.menuBar().addMenu("Help")
@@ -51,6 +52,7 @@ class MainWindow(QMainWindow):
         search_action.triggered.connect(self.search)
         edit_menu_item.addAction(search_action)
 
+        #Add Table to Main Window
         self.table = QTableWidget()
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(("Id", "Name", "Blood Group", "Phone Number", "Address"))
@@ -143,7 +145,7 @@ class GuideDialog(QDialog):
         super().__init__()
         self.setWindowTitle("Guide")
         
-
+        #Add main content for the Guide dialog box
         main_content = (
             "Blood Donor Management System - Instructions\n"
             "============================================\n\n"
@@ -181,12 +183,14 @@ class GuideDialog(QDialog):
             "Thank you for using the Blood Donor Management System!"
         )
         content_label = QLabel(main_content)
+        #To wrap words inside the qlabel
         content_label.setWordWrap(True)
 
         layout = QGridLayout()
         layout.addWidget(content_label)
         self.setLayout(layout)
 
+        #Adding the background picture to the dialogbox and color to the qlabel text
         self.setStyleSheet(
             """
             QDialog {
@@ -293,19 +297,19 @@ class EditDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        index = mainwindows.table.currentRow()
+        index = main_window.table.currentRow()
 
         #Get the donar id
-        self.donar_id = mainwindows.table.item(index, 0).text()
+        self.donar_id = main_window.table.item(index, 0).text()
 
         #Edit donar name
-        donar_name = mainwindows.table.item(index, 1).text()
+        donar_name = main_window.table.item(index, 1).text()
         self.donar_name = QLineEdit(donar_name)
         self.donar_name.setPlaceholderText("Name")
         layout.addWidget(self.donar_name)
 
         #Edit Blood Group
-        blood_group = mainwindows.table.item(index, 2).text()
+        blood_group = main_window.table.item(index, 2).text()
         self.blood_group = QComboBox()
         blood_groups = ["A+","A-","B+","B-","AB+","AB-","O+","O-"]
         self.blood_group.addItems(blood_groups)
@@ -313,18 +317,18 @@ class EditDialog(QDialog):
         layout.addWidget(self.blood_group)
 
         #Edit Phone number
-        phone = mainwindows.table.item(index, 3).text()
+        phone = main_window.table.item(index, 3).text()
         self.phone = QLineEdit(phone)
         self.phone.setPlaceholderText("Phone number")
         layout.addWidget(self.phone)
 
         #Edit Address
-        address = mainwindows.table.item(index, 4).text()
+        address = main_window.table.item(index, 4).text()
         self.address = QLineEdit(address)
         self.address.setPlaceholderText("Address")
         layout.addWidget(self.address)
 
-        #Add a submit button
+        #Add a update button
         button = QPushButton("Update")
         button.clicked.connect(self.update_record)
         layout.addWidget(button)
@@ -346,7 +350,7 @@ class EditDialog(QDialog):
         connection.close()
 
         #Refresh the main window
-        mainwindows.load_data()
+        main_window.load_data()
 
         self.close()
 
@@ -371,8 +375,8 @@ class DeleteDialog(QDialog):
 
     def delete_donar(self):
         # Get the donar id
-        index = mainwindows.table.currentRow()
-        donar_id = mainwindows.table.item(index, 0).text()
+        index = main_window.table.currentRow()
+        donar_id = main_window.table.item(index, 0).text()
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
 
@@ -395,7 +399,7 @@ class DeleteDialog(QDialog):
         connection.close()
 
         # Refresh the main window
-        mainwindows.load_data()
+        main_window.load_data()
 
         self.close()
 
@@ -454,7 +458,7 @@ class InsertDialog(QDialog):
         connection.commit()
         cursor.close()
         connection.close()
-        mainwindows.load_data()
+        main_window.load_data()
 
 
 class SearchDialog(QDialog):
@@ -484,18 +488,18 @@ class SearchDialog(QDialog):
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
         result = cursor.execute("SELECT * FROM students WHERE blood_group = ?",(blood_group,))
-        items = mainwindows.table.findItems(blood_group, Qt.MatchFlag.MatchFixedString)
+        items = main_window.table.findItems(blood_group, Qt.MatchFlag.MatchFixedString)
 
         for item in items:
-            mainwindows.table.item(item.row(),1).setSelected(True)
+            main_window.table.item(item.row(),1).setSelected(True)
         
         cursor.close()
         connection.close()
 
 
 app = QApplication(sys.argv)
-mainwindows = MainWindow()
-mainwindows.show()
-mainwindows.load_data()
+main_window = MainWindow()
+main_window.show()
+main_window.load_data()
 sys.exit(app.exec())
 
