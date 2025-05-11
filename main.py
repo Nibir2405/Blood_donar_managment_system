@@ -18,7 +18,7 @@ class DatabaseConnection:
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Blood Donar Management System")
+        self.setWindowTitle("Blood Donor Management System")
         self.setMinimumSize(800,600)
 
         #Add Menu Item
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         
 
         #Add insert action
-        add_action = QAction(QIcon("icons/add.png"),"Add Student", self)
+        add_action = QAction(QIcon("icons/add.png"),"Add Donor", self)
         add_action.triggered.connect(self.insert)
         file_menu_item.addAction(add_action)
 
@@ -320,10 +320,10 @@ class EditDialog(QDialog):
         self.donar_id = main_window.table.item(index, 0).text()
 
         #Edit donar name
-        donar_name = main_window.table.item(index, 1).text()
-        self.donar_name = QLineEdit(donar_name)
-        self.donar_name.setPlaceholderText("Name")
-        layout.addWidget(self.donar_name)
+        donor_name = main_window.table.item(index, 1).text()
+        self.donor_name = QLineEdit(donor_name)
+        self.donor_name.setPlaceholderText("Name")
+        layout.addWidget(self.donor_name)
 
         #Edit Blood Group
         blood_group = main_window.table.item(index, 2).text()
@@ -356,7 +356,7 @@ class EditDialog(QDialog):
         connection = DatabaseConnection().connect()        
         cursor = connection.cursor()
         cursor.execute("UPDATE students SET name = ?,blood_group = ?,mobile = ?,address = ? WHERE id = ?",
-                       (self.donar_name.text(),
+                       (self.donor_name.text(),
                         self.blood_group.itemText(self.blood_group.currentIndex()),
                         self.phone.text(),
                         self.address.text(),
@@ -387,18 +387,18 @@ class DeleteDialog(QDialog):
         layout.addWidget(no_button, 1, 1)
         self.setLayout(layout)
 
-        yes_button.clicked.connect(self.delete_donar)
+        yes_button.clicked.connect(self.delete_donor)
         no_button.clicked.connect(self.close)
 
-    def delete_donar(self):
-        # Get the donar id
+    def delete_donor(self):
+        # Get the donor id
         index = main_window.table.currentRow()
-        donar_id = main_window.table.item(index, 0).text()
+        donor_id = main_window.table.item(index, 0).text()
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
 
         # Delete the selected row
-        cursor.execute("DELETE FROM students WHERE id = ?", (donar_id,))
+        cursor.execute("DELETE FROM students WHERE id = ?", (donor_id,))
         connection.commit()
 
         # Renumber the id column
@@ -430,16 +430,16 @@ class DeleteDialog(QDialog):
 class InsertDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Add New Donar")
+        self.setWindowTitle("Add New Donor")
         self.setFixedWidth(300)
         self.setFixedHeight(300)
 
         layout = QVBoxLayout()
 
         #Add donar name
-        self.donar_name = QLineEdit()
-        self.donar_name.setPlaceholderText("Name")
-        layout.addWidget(self.donar_name)
+        self.donor_name = QLineEdit()
+        self.donor_name.setPlaceholderText("Name")
+        layout.addWidget(self.donor_name)
 
         #Add Blood Groups
         self.blood_group = QComboBox()
@@ -459,13 +459,13 @@ class InsertDialog(QDialog):
 
         #Add a submit button
         button = QPushButton("Submit")
-        button.clicked.connect(self.add_donar)
+        button.clicked.connect(self.add_donor)
         layout.addWidget(button)
 
         self.setLayout(layout)
 
-    def add_donar(self):
-        name = self.donar_name.text() 
+    def add_donor(self):
+        name = self.donor_name.text() 
         blood_group = self.blood_group.itemText(self.blood_group.currentIndex())
         mobile = self.phone.text()
         address = self.address.text()
@@ -495,12 +495,12 @@ class SearchDialog(QDialog):
 
         #Search button
         button = QPushButton("Search")
-        button.clicked.connect(self.search_donar)
+        button.clicked.connect(self.search_donor)
         layout.addWidget(button)
 
         self.setLayout(layout)
 
-    def search_donar(self):
+    def search_donor(self):
         blood_group = self.targername.text()
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
