@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayout, QLineEdit, QPushButton,\
-    QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox
+    QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox, QFileDialog, QHeaderView
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
 import sys
@@ -14,6 +14,7 @@ class DatabaseConnection:
         connection = sqlite3.connect(self.database_file)
         return connection
     
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -37,6 +38,16 @@ class MainWindow(QMainWindow):
         refresh_action.triggered.connect(self.load_data)
         file_menu_item.addAction(refresh_action)
 
+        # Add Import Database action
+        import_action = QAction(QIcon("icons/import.png"), "Import Database", self)
+        import_action.triggered.connect(self.import_database)
+        file_menu_item.addAction(import_action)
+
+        # Add Export Database action
+        export_action = QAction(QIcon("icons/export.png"), "Export Database", self)
+        export_action.triggered.connect(self.export_database)
+        file_menu_item.addAction(export_action)
+
         #Add instruction action
         instruction_action = QAction(QIcon("icons/instruction.png"),"Guide", self)
         help_menu_item.addAction(instruction_action)
@@ -57,25 +68,38 @@ class MainWindow(QMainWindow):
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(("Id", "Name", "Blood Group", "Phone Number", "Address"))
         self.table.verticalHeader().setVisible(False)
+        self.table.horizontalHeader().setStretchLastSection(True)  # Stretch the last column
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)  # Stretch all columns
+        self.table.setSizeAdjustPolicy(QTableWidget.SizeAdjustPolicy.AdjustToContents)  # Adjust size to contents
+        self.table.setColumnWidth(0, 30)  # Set a smaller width for the "Id" column
         self.setCentralWidget(self.table)
 
-        #Add Toolbar
+        # Add Toolbar
         toolbar = QToolBar()
         toolbar.setMovable(False)
         self.addToolBar(toolbar)
-        toolbar.addAction(add_action)
-        toolbar.addAction(search_action)
-        toolbar.addAction(refresh_action)
 
-        #Add Statusbar
+        # Add actions to the toolbar
+        toolbar.addAction(add_action)  # Add Donor
+        toolbar.addAction(search_action)  # Search
+        toolbar.addSeparator()  # Separator for grouping
+
+        toolbar.addAction(refresh_action)  # Refresh
+        toolbar.addSeparator()  # Separator for grouping
+
+        toolbar.addAction(import_action)  # Import Database
+        toolbar.addAction(export_action)  # Export Database
+        toolbar.addSeparator()  # Separator for grouping
+
+        # Add Statusbar
         self.statusbar = QStatusBar()
         self.setStatusBar(self.statusbar)
 
-        #Add version number to the statusbar
+        # Add version number to the statusbar
         version_no = QLabel(f"v{QApplication.applicationVersion()}")
         self.statusbar.addPermanentWidget(version_no)
 
-        #Detect a click 
+        # Detect a click
         self.table.cellClicked.connect(self.cell_clicked)
         self.table.clearSelection()  # Clear selection initially
         self.table.itemSelectionChanged.connect(self.clear_statusbar)  # Connect to clear status bar
@@ -142,6 +166,23 @@ class MainWindow(QMainWindow):
     def about(self):
         dialog = AboutDialog()
         dialog.exec()
+
+    def import_database(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Import Database", "", "SQLite Database Files (*.db)")
+        if file_path:
+            self.database_connection = DatabaseConnection(file_path)
+            self.load_data()
+            QMessageBox.information(self, "Success", "Database imported successfully!")
+
+    def export_database(self):
+        file_path, _ = QFileDialog.getSaveFileName(self, "Export Database", "", "SQL Files (*.sql)")
+        if file_path:
+            connection = DatabaseConnection().connect()
+            with open(file_path, 'w') as sql_file:
+                for line in connection.iterdump():
+                    sql_file.write(f"{line}\n")
+            connection.close()
+            QMessageBox.information(self, "Success", "Database exported successfully!")
 
 
 class GuideDialog(QDialog):
