@@ -1,7 +1,10 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayout, QLineEdit, QPushButton,\
-    QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox, QFileDialog, QHeaderView
+    QMainWindow, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, QToolBar, QStatusBar, QMessageBox, \
+    QFileDialog, QHeaderView
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
+from PyQt6 import QtCore
+from PyQt6 import uic
 import sys
 import sqlite3
 
@@ -73,6 +76,10 @@ class MainWindow(QMainWindow):
         self.table.setSizeAdjustPolicy(QTableWidget.SizeAdjustPolicy.AdjustToContents)  # Adjust size to contents
         self.table.setColumnWidth(0, 30)  # Set a smaller width for the "Id" column
         self.setCentralWidget(self.table)
+
+        #Adding a login page
+        self.log_App = LoginUi()
+        self.log_App.show()
 
         # Add Toolbar
         toolbar = QToolBar()
@@ -584,10 +591,63 @@ class SearchDialog(QDialog):
         connection.close()
 
 
+class LoginUi(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("login.ui", self)
+        # Remove the default title bar
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        # Add custom title bar
+        self.title_bar = QWidget(self)
+        self.title_bar.setStyleSheet("background-color: #2c3e50; color: white;")
+        self.title_bar.setFixedHeight(30)
+
+        # Add title bar layout
+        title_layout = QGridLayout(self.title_bar)
+        title_layout.setContentsMargins(0, 0, 0, 0)
+
+        # Add title label
+        self.title_label = QLabel("Login")
+        self.title_label.setStyleSheet("margin-left: 10px;")
+        title_layout.addWidget(self.title_label, 0, 0)
+
+        # Add minimize button
+        self.minimize_button = QPushButton("-")
+        self.minimize_button.setFixedSize(30, 30)
+        self.minimize_button.setStyleSheet("background-color: #34495e; color: white; border: none;")
+        self.minimize_button.clicked.connect(self.showMinimized)
+        title_layout.addWidget(self.minimize_button, 0, 1)
+
+        # Add close button
+        self.close_button = QPushButton("X")
+        self.close_button.setFixedSize(30, 30)
+        self.close_button.setStyleSheet("background-color: #e74c3c; color: white; border: none;")
+        self.close_button.clicked.connect(self.close)
+        title_layout.addWidget(self.close_button, 0, 2)
+
+        # Add title bar to the main layout
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.addWidget(self.title_bar)
+        main_layout.addStretch()
+        self.setLayout(main_layout)
+        self.login_button.clicked.connect(self.login_def)
+    
+    def login_def(self):
+        self.message = QMessageBox()
+        if self.username.text() == "admin" and self.password.text() == "bbn1971":
+            self.close()
+            main_window.show()
+        else:
+            self.message.setText("Incorrect username or password")
+            self.message.exec()
+
+
 app = QApplication(sys.argv)
 app.setApplicationVersion("1.0.1")
 main_window = MainWindow()
-main_window.show()
+#main_window.show()
 main_window.load_data()
 sys.exit(app.exec())
 
