@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayou
     QFileDialog, QHeaderView
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
-from PyQt6 import QtCore
 from PyQt6 import uic
 import sys
 import sqlite3
