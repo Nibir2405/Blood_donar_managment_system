@@ -134,7 +134,7 @@ class MainWindow(QMainWindow):
         self.table.setRowCount(0)
         
         connection = DatabaseConnection().connect()
-        result = connection.execute("SELECT * FROM students")
+        result = connection.execute("SELECT * FROM blood_donors")
         
         for row_number, row_data in enumerate(result):
             self.table.insertRow(row_number)
@@ -358,7 +358,7 @@ class EditDialog(QDialog):
         index = main_window.table.currentRow()
 
         #Get the donar id
-        self.donar_id = main_window.table.item(index, 0).text()
+        self.donor_id = main_window.table.item(index, 0).text()
 
         #Edit donar name
         donor_name = main_window.table.item(index, 1).text()
@@ -396,12 +396,12 @@ class EditDialog(QDialog):
     def update_record(self):
         connection = DatabaseConnection().connect()        
         cursor = connection.cursor()
-        cursor.execute("UPDATE students SET name = ?,blood_group = ?,mobile = ?,address = ? WHERE id = ?",
+        cursor.execute("UPDATE blood_donors SET name = ?,blood_group = ?,mobile = ?,address = ? WHERE id = ?",
                        (self.donor_name.text(),
                         self.blood_group.itemText(self.blood_group.currentIndex()),
                         self.phone.text(),
                         self.address.text(),
-                        self.donar_id))
+                        self.donor_id))
         
         connection.commit()
         cursor.close()
@@ -416,7 +416,7 @@ class EditDialog(QDialog):
 class DeleteDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Delete Donar's Record")
+        self.setWindowTitle("Delete Donor's Record")
 
         layout = QGridLayout()
         confirmation = QLabel("Are you sure you want to delete?")
@@ -432,25 +432,34 @@ class DeleteDialog(QDialog):
         no_button.clicked.connect(self.close)
 
     def delete_donor(self):
-        # Get the donor id
-        index = main_window.table.currentRow()
-        donor_id = main_window.table.item(index, 0).text()
+        # Get the selected rows
+        selected_items = main_window.table.selectedItems()
+        if not selected_items:
+            QMessageBox.warning(self, "No Selection", "Please select at least one record to delete.")
+            return
+
+        # Collect unique row indices
+        rows = sorted(set(item.row() for item in selected_items), reverse=True)
+
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
 
-        # Delete the selected row
-        cursor.execute("DELETE FROM students WHERE id = ?", (donor_id,))
+        # Delete each selected row
+        for row in rows:
+            donor_id = main_window.table.item(row, 0).text()
+            cursor.execute("DELETE FROM blood_donors WHERE id = ?", (donor_id,))
+
         connection.commit()
 
         # Renumber the id column
-        cursor.execute("CREATE TEMPORARY TABLE students_backup AS SELECT * FROM students")
-        cursor.execute("DELETE FROM students")
+        cursor.execute("CREATE TEMPORARY TABLE donors_backup AS SELECT * FROM blood_donors")
+        cursor.execute("DELETE FROM blood_donors")
         cursor.execute("""
-            INSERT INTO students (id, name, blood_group, mobile, address)
+            INSERT INTO blood_donors (id, name, blood_group, mobile, address)
             SELECT ROW_NUMBER() OVER (ORDER BY id) AS id, name, blood_group, mobile, address
-            FROM students_backup
+            FROM donors_backup
         """)
-        cursor.execute("DROP TABLE students_backup")
+        cursor.execute("DROP TABLE donors_backup")
         connection.commit()
 
         cursor.close()
@@ -462,10 +471,7 @@ class DeleteDialog(QDialog):
         self.close()
 
         # Show confirmation message
-        confirmation_message = QMessageBox()
-        confirmation_message.setWindowTitle("Successful")
-        confirmation_message.setText("The record was deleted successfully.")
-        confirmation_message.exec()
+        QMessageBox.information(self, "Successful", "The selected records were deleted successfully.")
         
 
 class InsertDialog(QDialog):
@@ -506,14 +512,37 @@ class InsertDialog(QDialog):
         self.setLayout(layout)
 
     def add_donor(self):
-        name = self.donor_name.text() 
+        name = self.donor_name.text()
         blood_group = self.blood_group.itemText(self.blood_group.currentIndex())
         mobile = self.phone.text()
         address = self.address.text()
+
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO students (name,blood_group,mobile,address) VALUES (?,?,?,?)",(name,blood_group,mobile,address))
-        connection.commit()
+
+        # Check for duplicates
+        cursor.execute("SELECT COUNT(*) FROM blood_donors WHERE mobile = ?", (mobile,))
+        if cursor.fetchone()[0] > 0:
+            QMessageBox.warning(self, "Duplicate Entry", "This donor already exists in the database.")
+        else:
+            # Insert new donor
+            cursor.execute("INSERT INTO blood_donors (name, blood_group, mobile, address) VALUES (?, ?, ?, ?)",
+                           (name, blood_group, mobile, address))
+            connection.commit()
+
+            # Fix numbering of the id column
+            cursor.execute("CREATE TEMPORARY TABLE donors_backup AS SELECT * FROM blood_donors")
+            cursor.execute("DELETE FROM blood_donors")
+            cursor.execute("""
+                INSERT INTO blood_donors (id, name, blood_group, mobile, address)
+                SELECT ROW_NUMBER() OVER (ORDER BY id) AS id, name, blood_group, mobile, address
+                FROM donors_backup
+            """)
+            cursor.execute("DROP TABLE donors_backup")
+            connection.commit()
+
+            QMessageBox.information(self, "Success", "Donor added successfully!")
+
         cursor.close()
         connection.close()
         main_window.load_data()
@@ -522,7 +551,7 @@ class InsertDialog(QDialog):
 class SearchDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Search Donar")
+        self.setWindowTitle("Search Donor")
         self.setFixedWidth(300)
         self.setFixedHeight(300)
 
@@ -542,10 +571,10 @@ class SearchDialog(QDialog):
         self.setLayout(layout)
 
     def search_donor(self):
-        blood_group = self.targername.text()
+        blood_group = self.targername.text().capitalize()
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
-        result = cursor.execute("SELECT * FROM students WHERE blood_group = ?",(blood_group,))
+        result = cursor.execute("SELECT * FROM blood_donors WHERE blood_group = ?",(blood_group,))
         items = main_window.table.findItems(blood_group, Qt.MatchFlag.MatchFixedString)
 
         for item in items:
