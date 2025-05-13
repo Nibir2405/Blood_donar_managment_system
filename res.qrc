@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="pic">
+    <file>background/bbn.png</file>
+    <file>icons/facebook.png</file>
+    <file>icons/linkedin.png</file>
+  </qresource>
+</RCC>

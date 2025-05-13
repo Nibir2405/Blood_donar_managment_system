@@ -6,6 +6,7 @@ from PyQt6.QtCore import Qt
 from PyQt6 import uic
 import sys
 import sqlite3
+from login import Ui_Form
 
 
 class DatabaseConnection:
@@ -593,7 +594,9 @@ class SearchDialog(QDialog):
 class LoginUi(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi("login.ui", self)
+        self.ui = Ui_Form()  # Create an instance of Ui_Form
+        self.ui.setupUi(self)  # Set up the UI on this QWidget
+        
         # Remove the default title bar
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -631,11 +634,11 @@ class LoginUi(QWidget):
         main_layout.addWidget(self.title_bar)
         main_layout.addStretch()
         self.setLayout(main_layout)
-        self.login_button.clicked.connect(self.login_def)
+        self.ui.login_button.clicked.connect(self.login_def)
     
     def login_def(self):
         self.message = QMessageBox()
-        if self.username.text() == "admin" and self.password.text() == "bbn1971":
+        if self.ui.username.text() == "admin" and self.ui.password.text() == "bbn1971":
             self.close()
             main_window.show()
         else:

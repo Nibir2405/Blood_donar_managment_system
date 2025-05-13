@@ -75,7 +75,7 @@ QPushButton#pushbutton_2-pressed{
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/images/Documents/python/Blood_donar_managment_system/background/bbn.png);
+     <string notr="true">border-image: url(:/pic/background/bbn.png);
 border-top-left-radius:50px;</string>
     </property>
     <property name="text">
@@ -86,7 +86,7 @@ border-top-left-radius:50px;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>30</y>
+      <y>20</y>
       <width>280</width>
       <height>461</height>
      </rect>
@@ -130,6 +130,7 @@ border-bottom-right-radius:50px;</string>
       <family>Bell MT</family>
       <pointsize>20</pointsize>
       <bold>true</bold>
+      <underline>false</underline>
      </font>
     </property>
     <property name="styleSheet">
@@ -196,6 +197,7 @@ padding-bottom:7px;</string>
       <family>Bell MT</family>
       <pointsize>11</pointsize>
       <bold>true</bold>
+      <underline>false</underline>
      </font>
     </property>
     <property name="text">
@@ -229,6 +231,7 @@ padding-bottom:7px;</string>
     </property>
     <property name="font">
      <font>
+      <family>Segoe UI</family>
       <pointsize>11</pointsize>
       <underline>true</underline>
      </font>
@@ -247,7 +250,7 @@ padding-bottom:7px;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/images/Documents/python/Blood_donar_managment_system/icons/linkedin.png);</string>
+     <string notr="true">border-image: url(:/pic/icons/linkedin.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -263,7 +266,7 @@ padding-bottom:7px;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/images/Documents/python/Blood_donar_managment_system/icons/facebook.png);</string>
+     <string notr="true">border-image: url(:/pic/icons/facebook.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -296,6 +299,7 @@ padding-bottom:7px;</string>
     </property>
     <property name="font">
      <font>
+      <family>Segoe UI</family>
       <pointsize>15</pointsize>
       <underline>false</underline>
       <fontweight>Black</fontweight>
@@ -315,7 +319,7 @@ Managment System</string>
   </widget>
  </widget>
  <resources>
-  <include location="../../../../Desktop/my_resources.qrc"/>
+  <include location="res.qrc"/>
  </resources>
  <connections/>
 </ui>
