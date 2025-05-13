@@ -675,7 +675,5 @@ class LoginUi(QWidget):
 app = QApplication(sys.argv)
 app.setApplicationVersion("1.0.1")
 main_window = MainWindow()
-#main_window.show()
 main_window.load_data()
 sys.exit(app.exec())
-
