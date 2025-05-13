@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayou
     QFileDialog, QHeaderView
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
-from PyQt6 import uic
+import webbrowser
 import sys
 import sqlite3
 from login import Ui_Form
@@ -71,10 +71,10 @@ class MainWindow(QMainWindow):
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(("Id", "Name", "Blood Group", "Phone Number", "Address"))
         self.table.verticalHeader().setVisible(False)
-        self.table.horizontalHeader().setStretchLastSection(True)  # Stretch the last column
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)  # Stretch all columns
-        self.table.setSizeAdjustPolicy(QTableWidget.SizeAdjustPolicy.AdjustToContents)  # Adjust size to contents
-        self.table.setColumnWidth(0, 30)  # Set a smaller width for the "Id" column
+        self.table.horizontalHeader().setStretchLastSection(True)  
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)  
+        self.table.setSizeAdjustPolicy(QTableWidget.SizeAdjustPolicy.AdjustToContents)  
+        
         self.setCentralWidget(self.table)
 
         #Adding a login page
@@ -87,16 +87,23 @@ class MainWindow(QMainWindow):
         self.addToolBar(toolbar)
 
         # Add actions to the toolbar
-        toolbar.addAction(add_action)  # Add Donor
-        toolbar.addAction(search_action)  # Search
-        toolbar.addSeparator()  # Separator for grouping
+        # Add Donor
+        toolbar.addAction(add_action) 
+        # Search 
+        toolbar.addAction(search_action) 
+        # Separator for grouping 
+        toolbar.addSeparator()  
+        
+        # Refresh
+        toolbar.addAction(refresh_action)  
+        toolbar.addSeparator()  
 
-        toolbar.addAction(refresh_action)  # Refresh
-        toolbar.addSeparator()  # Separator for grouping
-
-        toolbar.addAction(import_action)  # Import Database
-        toolbar.addAction(export_action)  # Export Database
-        toolbar.addSeparator()  # Separator for grouping
+        # Import Database
+        toolbar.addAction(import_action)
+         # Export Database  
+        toolbar.addAction(export_action) 
+        
+        toolbar.addSeparator()  
 
         # Add Statusbar
         self.statusbar = QStatusBar()
@@ -108,8 +115,10 @@ class MainWindow(QMainWindow):
 
         # Detect a click
         self.table.cellClicked.connect(self.cell_clicked)
-        self.table.clearSelection()  # Clear selection initially
-        self.table.itemSelectionChanged.connect(self.clear_statusbar)  # Connect to clear status bar
+        # Clear selection initially
+        self.table.clearSelection()  
+        # Connect to clear status bar
+        self.table.itemSelectionChanged.connect(self.clear_statusbar)  
 
     def cell_clicked(self):
         edit_button = QPushButton("Edit Record")
@@ -198,63 +207,72 @@ class GuideDialog(QDialog):
         self.setWindowTitle("Guide")
         self.setMinimumWidth(1000)
         
-        #Add main content for the Guide dialog box
+        # Add main content for the Guide dialog box
         main_content = (
             "Blood Donor Management System - Instructions\n"
             "============================================\n\n"
 
-            "1. **Add a Donor**:\n"
-            "- Click on the 'Add Student' button in the toolbar or select it from the 'File' menu.\n"
+            "1. **Login**:\n"
+            "- Enter the username and password on the login screen.\n"
+            "- Click the 'Login' button to access the application.\n"
+            "- Default credentials: Username: 'admin', Password: 'bbn1971'.\n\n"
+
+            "2. **Add a Donor**:\n"
+            "- Click on the 'Add Donor' button in the toolbar or select it from the 'File' menu.\n"
             "- Fill in the donor's details (Name, Blood Group, Phone Number, Address) in the form.\n"
             "- Click 'Submit' to save the donor's information.\n\n"
 
-            "2. **Search for a Donor**:\n"
+            "3. **Search for a Donor**:\n"
             "- Click on the 'Search' button in the toolbar or select it from the 'Edit' menu.\n"
             "- Enter the desired blood group in the search field.\n"
             "- Click 'Search' to highlight matching donors in the table.\n\n"
 
-            "3. **Edit a Donor's Information**:\n"
+            "4. **Edit a Donor's Information**:\n"
             "- Select a donor from the table by clicking on their row.\n"
             "- Click the 'Edit Record' button in the status bar.\n"
             "- Update the donor's details in the form and click 'Update' to save changes.\n\n"
 
-            "4. **Delete a Donor**:\n"
+            "5. **Delete a Donor**:\n"
             "- Select a donor from the table by clicking on their row.\n"
             "- Click the 'Delete Record' button in the status bar.\n"
             "- Confirm the deletion in the dialog box.\n\n"
 
-            "5. **Refresh Data**:\n"
+            "6. **Import Database**:\n"
+            "- Click on the 'Import Database' button in the toolbar or select it from the 'File' menu.\n"
+            "- Choose a valid SQLite database file (*.db) to load donor data into the application.\n\n"
+
+            "7. **Export Database**:\n"
+            "- Click on the 'Export Database' button in the toolbar or select it from the 'File' menu.\n"
+            "- Save the current donor data as an SQL file (*.sql) for backup or sharing purposes.\n\n"
+
+            "8. **Refresh Data**:\n"
             "- Click on the 'Refresh' button in the toolbar or select it from the "
             "'File' menu to reload the latest data from the database.\n\n"
 
-            "6. **View About Information**:\n"
-            "- Click on the 'About' button in the 'Help' menu to learn more about the application and its purpose.\n\n"
-
-            "7. **Exit the Application**:\n"
+            "9. **Exit the Application**:\n"
             "- Close the window or use the system's close button to exit the application.\n\n"
 
             "Thank you for using the Blood Donor Management System!"
         )
         content_label = QLabel(main_content)
-        #To wrap words inside the qlabel
+        # To wrap words inside the QLabel
         content_label.setWordWrap(True)
 
         layout = QGridLayout()
         layout.addWidget(content_label)
         self.setLayout(layout)
 
-        #Adding the background picture to the dialogbox and color to the qlabel text
+        # Adding the background picture to the dialog box and color to the QLabel text
         self.setStyleSheet(
             """
             QDialog {
                background-image: url("background/background2.png");
                background-repeat: no-repeat;
                background-position: center;
-               
             }
             QLabel {
                color: black;
-               font-size: 14px;
+               font-size: 12px;
             }
             """
         )
@@ -266,7 +284,6 @@ class AboutDialog(QDialog):
         self.setWindowTitle("About The App")
         self.setMinimumWidth(1000)
           
-
         # Main content for the dialog box
         main_content = (
             "<h2>Blood Donor Management System</h2>"
@@ -277,10 +294,13 @@ class AboutDialog(QDialog):
             f"<p><strong>Version:</strong>{QApplication.applicationVersion()}</p>"
             "<p><strong>Key Features:</strong></p>"
             "<ul>"
+            "<li>Login: Secure access to the application with a username and password.</li>"
             "<li>Add Donor: Easily add new donor records to the database.</li>"
             "<li>Search Donor: Search for donors by blood group to quickly find matching records.</li>"
             "<li>Edit Donor: Update existing donor information with ease.</li>"
             "<li>Delete Donor: Remove donor records and automatically renumber the IDs for consistency.</li>"
+            "<li>Import Database: Load donor data from an external SQLite database file.</li>"
+            "<li>Export Database: Save the current donor data as an SQL file for backup or sharing.</li>"
             "<li>Refresh Data: Reload the donor data to ensure the latest information is displayed.</li>"
             "<li>Instruction: Learn how to use the app.</li>"
             "<li>About Section: Learn more about the application and its owner.</li>"
@@ -315,11 +335,14 @@ class AboutDialog(QDialog):
 
         # Create a QLabel to display the content
         content_label = QLabel(full_content)
-        content_label.setTextFormat(Qt.TextFormat.RichText)  # Enable rich text formatting
-        content_label.setWordWrap(True)  # Allow text to wrap within the dialog
-        content_label.setOpenExternalLinks(True)  # Enable hyperlink interaction
-        content_label.setGeometry(20, 20, 760, 560)  # Position the content inside the dialog
-        
+        # Enable rich text formatting
+        content_label.setTextFormat(Qt.TextFormat.RichText)  
+        # Allow text to wrap within the dialog
+        content_label.setWordWrap(True)  
+        # Enable hyperlink interaction
+        content_label.setOpenExternalLinks(True)
+        # Position the content inside the dialog  
+        content_label.setGeometry(20, 20, 760, 560)  
 
         # Create a layout and add the QLabel
         layout = QVBoxLayout()
@@ -335,19 +358,18 @@ class AboutDialog(QDialog):
                background-image: url("background/background3.jpeg");
                background-repeat: no-repeat;
                background-position: center;
-               
             }
             QLabel {
                color: black;
                font-size: 14px;
             }
-            QLabel a{
+            QLabel a {
                 color: black;
-                text-decoration:none;
+                text-decoration: none;
             }
             QLabel a:hover {
-                color:black;
-                text-decoration:underline;
+                color: black;
+                text-decoration: underline;
             }
             """
         )
@@ -594,8 +616,8 @@ class SearchDialog(QDialog):
 class LoginUi(QWidget):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_Form()  # Create an instance of Ui_Form
-        self.ui.setupUi(self)  # Set up the UI on this QWidget
+        self.ui = Ui_Form()  
+        self.ui.setupUi(self)  
         
         # Remove the default title bar
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
@@ -634,7 +656,11 @@ class LoginUi(QWidget):
         main_layout.addWidget(self.title_bar)
         main_layout.addStretch()
         self.setLayout(main_layout)
+
+        #button connect
         self.ui.login_button.clicked.connect(self.login_def)
+        self.ui.linkedin_button.clicked.connect(lambda: webbrowser.open("https://www.linkedin.com/in/navid-ul-islam-2052aa216/"))
+        self.ui.fb_button.clicked.connect(lambda: webbrowser.open("https://www.facebook.com/profile.php?id=100010379958908"))
     
     def login_def(self):
         self.message = QMessageBox()
