@@ -689,7 +689,7 @@ class LoginUi(QWidget):
         #button connect
         self.ui.login_button.clicked.connect(self.login_def)
         self.ui.linkedin_button.clicked.connect(lambda: webbrowser.open("https://www.linkedin.com/in/navid-ul-islam-2052aa216/"))
-        self.ui.fb_button.clicked.connect(lambda: webbrowser.open("https://www.facebook.com/profile.php?id=100010379958908"))
+        self.ui.fb_button.clicked.connect(lambda: webbrowser.open("https://www.facebook.com/profile.php?id=100064377955880"))
     
     def login_def(self):
         self.message = QMessageBox()

@@ -28,9 +28,16 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>611</width>
+     <width>621</width>
      <height>531</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>9</pointsize>
+     <underline>false</underline>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
@@ -38,10 +45,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>15</x>
-      <y>20</y>
-      <width>301</width>
-      <height>501</height>
+      <x>5</x>
+      <y>0</y>
+      <width>311</width>
+      <height>531</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -72,10 +79,10 @@ border-top-left-radius:50px;</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>20</y>
-      <width>291</width>
-      <height>501</height>
+      <x>310</x>
+      <y>0</y>
+      <width>301</width>
+      <height>531</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -90,7 +97,7 @@ border-bottom-right-radius:50px;</string>
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>70</y>
+      <y>50</y>
       <width>100</width>
       <height>40</height>
      </rect>
@@ -113,8 +120,8 @@ border-bottom-right-radius:50px;</string>
    <widget class="QLineEdit" name="username">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>150</y>
+      <x>330</x>
+      <y>140</y>
       <width>211</width>
       <height>40</height>
      </rect>
@@ -133,11 +140,18 @@ padding-bottom:7px;</string>
    <widget class="QLineEdit" name="password">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>330</x>
       <y>220</y>
       <width>211</width>
       <height>40</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI Historic</family>
+      <pointsize>9</pointsize>
+      <underline>false</underline>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color:rgba(0,0,0,0);
@@ -149,14 +163,20 @@ padding-bottom:7px;</string>
     <property name="echoMode">
      <enum>QLineEdit::EchoMode::Password</enum>
     </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
     <property name="placeholderText">
      <string> Password</string>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="login_button">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>330</x>
       <y>300</y>
       <width>211</width>
       <height>40</height>
@@ -181,7 +201,7 @@ padding-bottom:7px;</string>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>330</x>
       <y>350</y>
       <width>261</width>
       <height>16</height>
@@ -205,7 +225,7 @@ padding-bottom:7px;</string>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>330</x>
       <y>430</y>
       <width>151</width>
       <height>16</height>
@@ -226,7 +246,7 @@ padding-bottom:7px;</string>
    <widget class="QPushButton" name="linkedin_button">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>330</x>
       <y>460</y>
       <width>31</width>
       <height>31</height>
@@ -242,7 +262,7 @@ padding-bottom:7px;</string>
    <widget class="QPushButton" name="fb_button">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>360</x>
       <y>460</y>
       <width>31</width>
       <height>31</height>
@@ -258,9 +278,9 @@ padding-bottom:7px;</string>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>5</x>
       <y>70</y>
-      <width>284</width>
+      <width>305</width>
       <height>141</height>
      </rect>
     </property>
@@ -274,7 +294,7 @@ padding-bottom:7px;</string>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>100</y>
       <width>251</width>
       <height>71</height>
@@ -285,7 +305,7 @@ padding-bottom:7px;</string>
       <family>Bookman Old Style</family>
       <pointsize>15</pointsize>
       <underline>false</underline>
-      <fontweight>Black</fontweight>
+      <fontweight>ExtraBold</fontweight>
      </font>
     </property>
     <property name="styleSheet">
@@ -294,7 +314,7 @@ selection-color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
      <string>Blood Donor 
-Managment System</string>
+Management System</string>
     </property>
     <property name="scaledContents">
      <bool>false</bool>
