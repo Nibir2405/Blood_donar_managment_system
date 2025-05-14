@@ -10,7 +10,7 @@ from login import Ui_Form
 
 
 class DatabaseConnection:
-    def __init__(self,database_file="database.db"):
+    def __init__(self,database_file="data/donors_records.db"):
         self.database_file = database_file
 
     def connect(self):
