@@ -4,14 +4,43 @@ from PyQt6.QtWidgets import QApplication, QLabel, QComboBox, QWidget, QGridLayou
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
 import webbrowser
-import sys
+import sys, os
+from platformdirs import user_documents_path
 import sqlite3
 from login import Ui_Form
 
 
 class DatabaseConnection:
-    def __init__(self,database_file="data/donors_records.db"):
+    # Getting the dynamic path to work on any other os
+
+    document_path = user_documents_path()
+    db_path = os.path.join(document_path, r"donor_data\donors_records.db")
+
+    def __init__(self, database_file=db_path):
         self.database_file = database_file
+        self.ensure_database()
+
+    def ensure_database(self):
+        # Ensure the directory exists
+        db_dir = os.path.dirname(self.database_file)
+        if not os.path.exists(db_dir):
+            os.makedirs(db_dir)
+        # If the database file does not exist, create it and the table
+        if not os.path.exists(self.database_file):
+            connection = sqlite3.connect(self.database_file)
+            cursor = connection.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS blood_donors (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    blood_group TEXT NOT NULL,
+                    mobile TEXT NOT NULL,
+                    address TEXT NOT NULL
+                )
+            """)
+            connection.commit()
+            cursor.close()
+            connection.close()
 
     def connect(self):
         connection = sqlite3.connect(self.database_file)
