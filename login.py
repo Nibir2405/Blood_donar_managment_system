@@ -7,7 +7,7 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-import sys, res
+import os,res
 
 
 class Ui_Form(object):
@@ -21,59 +21,29 @@ class Ui_Form(object):
         Form.setFont(font)
         Form.setStyleSheet("")
         self.widget = QtWidgets.QWidget(parent=Form)
-        self.widget.setGeometry(QtCore.QRect(30, 20, 551, 501))
-        self.widget.setStyleSheet("QPushButton#pushbutton{\n"
-"    background-color: qlineargradient(spread:repeat, x1:1, y1:1, x2:0, y2:1, stop:0 rgba(0, 0, 255, 255), stop:1 rgba(85, 81, 84, 226));\n"
-"    color:rgba(255,255,255,210);\n"
-"    border-radius:5px;\n"
-"}\n"
-"\n"
-"QPushButton#pushbutton-hover{\n"
-"    background-color: qlineargradient(spread:repeat, x1:1, y1:1, x2:0, y2:1, stop:0 rgba(0, 0, 255, 255), stop:1 rgba(90, 11, 50, 200));\n"
-"}\n"
-"\n"
-"QPushButton#pushbutton-pressed{\n"
-"    padding-left:5px;\n"
-"    padding-top:5px;\n"
-"    background-color:rgba(150,123,11,250);\n"
-"}\n"
-"\n"
-"QPushButton#pushbutton_2{\n"
-"    background-color: qlineargradient(spread:repeat, x1:1, y1:1, x2:0, y2:1, stop:0 rgba(0, 0, 255, 255), stop:1 rgba(85, 81, 84, 226));\n"
-"    color:rgba(255,255,255,210);\n"
-"    border-radius:5px;\n"
-"}\n"
-"\n"
-"QPushButton#pushbutton_2-hover{\n"
-"    background-color: qlineargradient(spread:repeat, x1:1, y1:1, x2:0, y2:1, stop:0 rgba(0, 0, 255, 255), stop:1 rgba(90, 11, 50, 200));\n"
-"}\n"
-"\n"
-"QPushButton#pushbutton_2-pressed{\n"
-"    padding-left:5px;\n"
-"    padding-top:5px;\n"
-"    background-color:rgba(150,123,11,250);\n"
-"}")
+        self.widget.setGeometry(QtCore.QRect(10, 10, 611, 531))
+        self.widget.setStyleSheet("")
         self.widget.setObjectName("widget")
         self.label = QtWidgets.QLabel(parent=self.widget)
-        self.label.setGeometry(QtCore.QRect(40, 30, 280, 461))
+        self.label.setGeometry(QtCore.QRect(15, 20, 301, 501))
         self.label.setStyleSheet("border-image: url(:/pic/background/bbn.png);\n"
 "border-top-left-radius:50px;")
         self.label.setText("")
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(parent=self.widget)
-        self.label_2.setGeometry(QtCore.QRect(20, 20, 280, 461))
+        self.label_2.setGeometry(QtCore.QRect(300, 90, 281, 461))
         self.label_2.setStyleSheet("background-colour:rgba(0,0,0,80);\n"
 "border-top-left-radius:50px;")
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(parent=self.widget)
-        self.label_3.setGeometry(QtCore.QRect(290, 30, 240, 461))
+        self.label_3.setGeometry(QtCore.QRect(300, 20, 291, 501))
         self.label_3.setStyleSheet("background-color:rgba(255,255,255,255);\n"
 "border-bottom-right-radius:50px;")
         self.label_3.setText("")
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(parent=self.widget)
-        self.label_4.setGeometry(QtCore.QRect(360, 70, 100, 40))
+        self.label_4.setGeometry(QtCore.QRect(390, 70, 100, 40))
         font = QtGui.QFont()
         font.setFamily("Bell MT")
         font.setPointSize(20)
@@ -83,68 +53,89 @@ class Ui_Form(object):
         self.label_4.setStyleSheet("color:rgba(0,0,0,200)")
         self.label_4.setObjectName("label_4")
         self.username = QtWidgets.QLineEdit(parent=self.widget)
-        self.username.setGeometry(QtCore.QRect(310, 150, 190, 40))
+        self.username.setGeometry(QtCore.QRect(320, 150, 211, 40))
         self.username.setStyleSheet("background-color:rgba(0,0,0,0);\n"
 "border:none;\n"
 "border-bottom:2px solid rgba(46,82,101,200);\n"
-"color:rgba(0,0,0,240);\n"
+"color:rgba(0,0,280,240);\n"
 "padding-bottom:7px;")
         self.username.setObjectName("username")
         self.password = QtWidgets.QLineEdit(parent=self.widget)
-        self.password.setGeometry(QtCore.QRect(310, 210, 190, 40))
+        self.password.setGeometry(QtCore.QRect(320, 220, 211, 40))
         self.password.setStyleSheet("background-color:rgba(0,0,0,0);\n"
 "border:none;\n"
 "border-bottom:2px solid rgba(46,82,101,200);\n"
-"color:rgba(0,0,0,240);\n"
+"color:rgba(0,0,280,240);\n"
 "padding-bottom:7px;")
         self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.password.setObjectName("password")
         self.login_button = QtWidgets.QPushButton(parent=self.widget)
-        self.login_button.setGeometry(QtCore.QRect(310, 295, 190, 40))
+        self.login_button.setGeometry(QtCore.QRect(320, 300, 211, 40))
         font = QtGui.QFont()
         font.setFamily("Bell MT")
         font.setPointSize(11)
-        font.setBold(True)
         font.setUnderline(False)
         self.login_button.setFont(font)
+        self.login_button.setStyleSheet("background-color: rgb(68, 68, 68);\n"
+"")
         self.login_button.setObjectName("login_button")
         self.label_5 = QtWidgets.QLabel(parent=self.widget)
-        self.label_5.setGeometry(QtCore.QRect(310, 350, 191, 16))
+        self.label_5.setGeometry(QtCore.QRect(320, 350, 261, 16))
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setUnderline(False)
+        self.label_5.setFont(font)
         self.label_5.setStyleSheet("color:rgba(0,0,0,210);")
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(parent=self.widget)
-        self.label_6.setGeometry(QtCore.QRect(310, 390, 201, 16))
+        self.label_6.setGeometry(QtCore.QRect(320, 430, 151, 16))
         font = QtGui.QFont()
-        font.setFamily("Segoe UI")
+        font.setFamily("Calibri")
         font.setPointSize(11)
+        font.setBold(True)
         font.setUnderline(True)
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.linkedin_button = QtWidgets.QPushButton(parent=self.widget)
-        self.linkedin_button.setGeometry(QtCore.QRect(310, 420, 31, 31))
+        self.linkedin_button.setGeometry(QtCore.QRect(320, 460, 31, 31))
         self.linkedin_button.setStyleSheet("border-image: url(:/pic/icons/linkedin.png);")
         self.linkedin_button.setText("")
         self.linkedin_button.setObjectName("linkedin_button")
         self.fb_button = QtWidgets.QPushButton(parent=self.widget)
-        self.fb_button.setGeometry(QtCore.QRect(350, 420, 31, 31))
+        self.fb_button.setGeometry(QtCore.QRect(350, 460, 31, 31))
         self.fb_button.setStyleSheet("border-image: url(:/pic/icons/facebook.png);")
         self.fb_button.setText("")
         self.fb_button.setObjectName("fb_button")
         self.label_7 = QtWidgets.QLabel(parent=self.widget)
-        self.label_7.setGeometry(QtCore.QRect(40, 70, 251, 141))
+        self.label_7.setGeometry(QtCore.QRect(15, 70, 284, 141))
         self.label_7.setStyleSheet("background-color:rgba(0,0,0,75);")
         self.label_7.setText("")
         self.label_7.setObjectName("label_7")
         self.label_8 = QtWidgets.QLabel(parent=self.widget)
-        self.label_8.setGeometry(QtCore.QRect(50, 90, 221, 71))
+        self.label_8.setGeometry(QtCore.QRect(20, 100, 251, 71))
         font = QtGui.QFont()
-        font.setFamily("Segoe UI")
+        font.setFamily("Bookman Old Style")
         font.setPointSize(15)
         font.setUnderline(False)
         self.label_8.setFont(font)
-        self.label_8.setStyleSheet("color:rgba(255,255,255,210);")
+        self.label_8.setStyleSheet("\n"
+"selection-color: rgb(0, 0, 0);")
         self.label_8.setScaledContents(False)
         self.label_8.setObjectName("label_8")
+        self.label_9 = QtWidgets.QLabel(parent=self.widget)
+        self.label_9.setGeometry(QtCore.QRect(20, 250, 271, 221))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy)
+        self.label_9.setAutoFillBackground(False)
+        self.label_9.setStyleSheet("border-image: url(:/pic/background/bbn logo.png);")
+        self.label_9.setText("")
+        self.label_9.setScaledContents(False)
+        self.label_9.setObjectName("label_9")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
