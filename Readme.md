@@ -63,8 +63,8 @@ pip install PyQt6 platformdirs
 
 ## Screenshots
 
-![Alt text](Screenshot\Screenshot_1.png?raw=true "Optional Title")
-![Alt text](Screenshot\Screenshot_2.png?raw=true "Optional Title")
+<img src="Screenshot\Screenshot_1.png" alt="ScreenShot_1">
+<img src="Screenshot\Screenshot_2.png" alt="Screenshot_2">
 
 ---
 
